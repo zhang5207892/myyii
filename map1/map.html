@@ -1,0 +1,1160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Windows (vers 14 February 2006), see www.w3.org" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="MediaWiki 1.16.1" />
+    <title>
+      纳金供应链物流线路、仓库位置信息地图生成器
+    </title>
+	<meta name="keywords" content="地图生成器" />
+    
+    
+    <link rel="stylesheet" href="css/main.css" media="screen" type="text/css" />
+    
+    <script type="text/javascript" src=
+    "http://api.map.baidu.com/api?v=2.0&ak=0C6dc82732be0463405a3fa53d346b74">
+</script>
+    <link rel="stylesheet" type="text/css" href="css/home.css?v=20101122" />
+    <script type="text/javascript" src="js/tangram.js"></script>
+    <script type="text/javascript" src="js/index.js?v=201012231"></script>
+    <script type="text/javascript" src="js/mapext.js"></script>
+    <script type="text/javascript" src="js/copy.js"></script>
+
+    <!--加载绘图工具-->
+    <script type="text/javascript" src="./js/DrawingManager_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <!--加载检索信息窗口-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+    <script type="text/javascript" src="http://api.map.baidu.com/library/MarkerTool/1.2/src/MarkerTool_min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js"></script>
+    <!--加载bootstrap-->
+ <!--   <link rel="stylesheet" href="./bootstrap/css/bootstrap.css" />
+    <script type="text/javascript" src="./bootstrap/js/bootstrap.js"></script>-->
+  </head>
+  <body>
+    <!--head bg-->
+    <div id="wiki_header">
+
+      <div id="wiki_logo">
+        <a href="http://developer.baidu.com/map"><img src=
+        "http://www.nakonsc.com/statics/images/jyzx-logo.png" /></a>
+      </div>
+      <div id="wiki_login">
+        <span id="userName"></span><a href=
+        "http://www.nakonsc.com">首页</a><span class=
+        "line">|</span><a id="login" href="https://passport.baidu.com/" name=
+        "login">登录</a>
+      </div>
+       </div><!--head ed-->
+    <div class="signBoxCon">
+      <!-- 对话框 -->
+      <div style=
+      "position:absolute;left:155px;top:120px;display:none;width:752px;height:379px;z-index:9999;background:none repeat scroll 0% 0% rgb(235, 236, 237);"
+      class="dialog_box" id="Layer1">
+        <div class="box1">
+          <div class="box2">
+            <div style=
+            "background: none repeat scroll 0% 0% rgb(255, 255, 255); margin: 1px; width: 746px; height: 373px; display: inline-block;"
+            class="bder_color3">
+              <div style="margin: 10px;">
+                <div style="float: left;width:595px;" class="l">
+                  <span class=
+                  "bold font_color font14">自定义地图代码</span>
+                  <div style=
+                  "background: none repeat scroll 0% 0% rgb(245, 249, 252); width: 593px; height: 323px;"
+                  class="bder_color3 t10">
+                    <div style=
+                    "background: none repeat scroll 0% 0% rgb(255, 255, 255); width: 573px; height: 303px; margin: 10px;"
+                    class="r font12 font_color bder_color3">
+                      <div style=
+                      "overflow-y: auto; width: 573px; height: 303px;margin:0"
+                      class="l font12 font_color">
+                        <textarea id="bareasign" readonly="readonly">
+</textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="float: right; width: 125px;" class="">
+                  <div style="margin-top: 229px;"></div>
+                  <div style="display: block; height: 20px;text-align:center;">
+                    <div class="clear"></div>
+                    <div style=
+                    "color: rgb(255, 0, 0); display: none; font-size: 12px;"
+                    id="su_sign">
+                      复制成功
+                    </div>
+                  </div>
+                  <div class="t10" id="copy_sign"></div>
+                  <div style="width: 98px; height: 34px;" class=
+                  "bder_color t10">
+                    <span class="bder_color cen bg_h2 bold font_color font14"
+                    style=
+                    "display: block; cursor: pointer; width: 94px; height: 30px; margin: 1px; line-height: 30px; vertical-align: middle;"
+                    onclick="closeDiv('Layer1')">关闭</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- body -->
+      <div class="body t10">
+        <div class="sl_bg bold font14 font_color l">
+          <span class="l10">仓储 路线 规划</span>
+        </div>
+        <div class="sign_content1 margin_sT5">
+          <!--<div class="l color_h" style="width:227px;height:281px;margin:10px 0px 10px 10px;float:left;display:inline-block;">-->
+          <table style="width:944px;margin:10px;" id="wxp_zdydt">
+            <tr>
+              <td style="width:223px;text-align:left;vertical-align:top">
+
+
+                <!--选择 -->
+                <div class="map_open" style="margin-top:10px;" onclick=
+                        "setStates(this,event)" id="mapPoint">
+                  <div class="map_title_s bg_h2 bold font14" navtype="sign">
+                    1.添加仓库物流路线
+                  </div>
+                  <div class="map_content">
+                    <div class="wxp_nav_1">
+                      <ul class="wxp_nav_bg1" id="sign_nav_bg">
+                        <li class="nav2" id="didian" onclick=
+                                "getValue_didian()" usertagpanl="iw" title=
+                                    "标记仓库">标记仓库
+                        </li>
+                        <li class="nav2" id="huax" onclick=
+                                "getValue_huaxian()" usertagpanl="pl" title=
+                                    "绘路线">手绘路线
+                        </li>
+                        <!-- <li class="nav3" id="biaoq" onclick=
+                         "changeSignNav(this,3,event)"
+                             usertagpanl="lb" title=
+                         "文字标记">文字备注
+                         </li>-->
+                        <li class="nav3" id="biaoq" onclick=
+                                "getValue_wenzi()"
+                            usertagpanl="lb" title=
+                                    "文字标记">文字备注
+                        </li>
+                      </ul>
+                    </div>
+                    <div id="sign_content_1" style=
+                            "position:relative;overflow:hidden;">
+                      <p class="wxp_con_2" id="pointIconCon">
+                        <a href="javascript:exitPtIcon()" class=
+                                "null">̨ߔ回</a><br />
+                        <a class="on" onclick="setPtIcon(11);return false"
+                           href="javascript:void(0);"><img class="sp_s sp_11"
+                                                           src="images/transparent.gif" /></a><a onclick=
+                                                                                                         "setPtIcon(12);return false" href=
+                                                                                                         "javascript:void(0);"><img class="sp_s sp_12" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(13);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_13" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(14);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_14" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(15);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_15" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(16);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_16" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(21);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_21" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(22);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_22" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(23);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_23" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(24);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_24" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(25);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_25" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(26);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_26" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(31);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_31" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(32);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_32" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(33);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_33" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(34);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_34" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(35);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_35" src=
+                              "images/transparent.gif" /></a><a onclick=
+                                                                        "setPtIcon(36);return false" href=
+                                                                        "javascript:void(0);"><img class="sp_s sp_36" src=
+                              "images/transparent.gif" /></a>
+                      </p>
+                      <p id="signPointTip" style="display:none" class=
+                              "signTip">
+                        Tip
+                      </p>
+                      <ul class="wxp_lis_1" id="signPointList">
+                        <li id="signiwNoListTip">
+                          选择相关的操作，此处有相关操作提示
+                        </li>
+                      </ul>
+                      <div style="color:#808080;display:none;padding:5px;"
+                           id="signiwSaveTip">
+                        (提示：请保存未保存的点标记，未保存的点标记在获取代码时内容不是最新的！)
+                      </div>
+                    </div>
+                    <div id="sign_content_2" style="display:none;">
+                      <p id="signPolyLineTip" style="display:none" class=
+                              "signTip">
+                        Tip
+                      </p>
+                      <ul class="wxp_lis_1" id="signPolylineList">
+                        <li id="signplNoListTip">
+                          还没有在地图上添加线标记，点击上面的按钮开始在地图上添加线标记
+                        </li>
+                      </ul>
+                      <div style="color:#808080;display:none;padding:5px;"
+                           id="signplSaveTip">
+                        (提示：请保存未保存的线标记，未保存的线标记在获取代码时内容不是最新的！)
+                      </div>
+                    </div>
+                    <div id="sign_content_3" style="display:none">
+                      <p id="signRemarkTip" style="display:none" class=
+                              "signTip">
+                        Tip
+                      </p>
+                      <ul class="wxp_lis_1" id="signRemarkList">
+                        <li id="signlbNoListTip">
+                          还没有在地图上添加文字标记，点击上面的按钮开始在地图上添加文字标记
+                        </li>
+                      </ul>
+                      <div style="color:#808080;display:none;padding:5px;"
+                           id="signlbSaveTip">
+                        (提示：请保存未保存的文字标记，未保存的文字标记在获取代码时内容不是最新的！)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--选择结束-->
+
+
+
+
+                <div>
+                  <div class="map_close" onclick="setStates(this,event)" id=
+                  "mapCenter">
+                    <div class="map_title_s bg_h2 bold font14" style=
+                    "margin-top:0" navtype="setMapCenter">
+                      2.仓库消息
+                    </div>
+                    <form action="" method="get"  id="search_form" enctype="multipart/form-data"  onsubmit="return sumbitTest()">
+                    <div class="map_content">
+                      <ul class="wxp_list1">
+                        <li id="cityNameTip" style=
+                        "display:none;text-align:center;color:#f00"></li>
+                        <li>纳金仓库相关信息：
+                        </li>
+                        <li class="input1">
+                          <b>X的坐标 ：</b><input type="text"  style="border: 0px" name="mapCenterPointX" id="mapCenterPointX"
+                          readonly="true"  value=""/>
+                        </li>
+                        <li class="input1">
+                          <b>Y的坐标 ：</b><input type="text"  style="border: 0px" name='mapCenterPointY' id="mapCenterPointY"
+                          readonly="true" value=""/>
+                        </li>
+                        <li class="input1">
+                          <b>仓库名称：</b><input type="text" id="ckname" name="ckname"
+                                              value=""/>
+                        </li>
+                        <li class="input1">
+                          <b>联系方式：</b><input type="text" id="phone"  name="phone"
+                                             value=""/>
+                        </li>
+                        <li class="input1">
+                          <b>占地面积：</b><input type="text" id="mianji"  name="mianji"
+                                             value=""/>
+                        </li>
+                        <li style="line-height: 15px">
+                          <b style="color:#727272;margin-top: 5px;">仓库产权：</b><input type="radio" name="xingzhi"
+                                                                                   value="自有" checked/>自有
+                          <input type="radio" name="xingzhi"
+                                 value="第三方"/>第三方
+                        </li>
+
+                        <li class="input1" >
+                          <b style="vertical-align: top">仓库备注：</b><textarea rows="3" style="width: 130px;border-color:#D1E7FB ;background: #F5F5F5;" cols="1"  id="beizhu"></textarea>
+                        </li>
+                        <li style="text-align: center">
+                          <input type="submit" value="保存"/>
+
+                          <input type="submit" value="取消"/>
+                        </li>
+                      </ul>
+                    </div>
+                    </form>
+                  </div>
+<!--备注字体开始-->
+
+<!--划线信息开始-->
+                  <div class="map_close" style="margin-top:10px;" onclick="setStates(this,event)" id=
+                          "mapCenter3">
+                    <div class="map_title_s bg_h2 bold font14" style=
+                            "margin-top:0" navtype="setMapCenter">
+                      3.路线信息
+                    </div>
+                    <form action="" method="get"  id="search_form3" enctype="multipart/form-data" onsubmit="return sumbitTest2()">
+                      <div class="map_content">
+                        <ul class="wxp_list1">
+                          <li id="cityNameTip3" style=
+                                  "display:none;text-align:center;color:#f00"></li>
+                          <li>纳金路线相关信息：
+                          </li>
+                          <li class="input1">
+                            <b>路线长度：</b><input type="text" style="border: 0px" id="lucd"  name="beizhu1"
+                                               value="" readonly="true"/>
+                          </li>
+                          <li class="input1">
+                            <b>开始坐标：</b><input type="text" style="border: 0px;font-size:smaller" id="kaiszb"  name="beizhu1zb"
+                                               value="" readonly="true"/>
+                          </li>
+                          <li class="input1">
+                            <b>结束坐标：</b><input type="text" style="border: 0px;font-size:smaller" id="jieszb"  name="jieszb"
+                                               value="" readonly="true"/>
+                          </li>
+
+                          <li class="input1">
+                            <b>开始地点：</b><input type="text" id="kais"  name="beizhu1"
+                                               value=""/>
+                          </li>
+                          <li class="input1">
+                            <b>结束地点：</b><input type="text" id="jies"  name="jies1"
+                                               value="" />
+                          </li>
+                          <li class="input1">
+                            <b>路线名称：</b><input type="text" id="lxmc"  name="beizhu1"
+                                               value=""/>
+                          </li>
+                          <li class="input1">
+                            <b style="vertical-align: top">路线备注：</b>
+                            <textarea rows="3" style="width: 127px;border-color:#D1E7FB ;background: #F5F5F5;" cols="1"  id="lxbeizhu" name="beizhu1"></textarea>
+                          </li>
+
+                          <li style="text-align: center">
+                            <input type="submit" value="保存"/>
+
+                            <input type="submit" value="取消"/>
+                          </li>
+                        </ul>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!--划线信息结束-->
+
+
+
+                  <div class="map_close" style="margin-top:10px;" onclick="setStates(this,event)" id=
+                          "mapCenter2">
+                    <div class="map_title_s bg_h2 bold font14" style=
+                            "margin-top:0" navtype="setMapCenter">
+                      4.文字备注
+                    </div>
+                    <form action="" method="get"  id="search_form4" enctype="multipart/form-data" onsubmit="return sumbitTest3()">
+                      <div class="map_content">
+                        <ul class="wxp_list1">
+                          <li id="cityNameTip2" style=
+                                  "display:none;text-align:center;color:#f00"></li>
+                          <li>地图文字备注相关信息：
+                          </li>
+                          <li class="input1">
+                            <b>X的坐标 ：</b><input type="text"  name="mapCenterPointX1" id="mapCenterPointX1"
+                                                readonly="true"  value="" style="border: 0px"/>
+                          </li>
+                          <li class="input1">
+                            <b>Y的坐标 ：</b><input type="text"  name='mapCenterPointY1' id="mapCenterPointY1"
+                                                readonly="true" value="" style="border: 0px"/>
+                          </li>
+                          <li class="input1">
+                            <b style="vertical-align: top">备注信息：</b><textarea rows="3" style="width: 127px;border-color:#D1E7FB;background: #F5F5F5; " cols="1"  id="xxbeizhu" name="beizhu1"></textarea>
+                          </li>
+                          <li style="text-align: center">
+                            <input type="submit" value="保存"/>
+
+                            <input type="submit" value="取消"/>
+                          </li>
+                        </ul>
+                      </div>
+                    </form>
+                  </div>
+
+
+<!--备注字体结束-->
+
+
+
+
+                </div>
+              </td>
+              <td style="vertical-align:top">
+                <div id="MapContent" style=
+                "width:900px;height:750px;float:left;border:solid 1px #c8c8c8;margin-left:12px;">
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!--<div class="sign_nav_1 bold font14 font_color l t10">
+          <span>更多高级功能</span>
+        </div>-->
+        <!--<div class="sign_content2 t10 font14 color_h l">
+          <div class="tit2 t10 l10 l" style=
+          "width:380px;height:30px;margin:0;padding:0px;display:inline-block;float:left;">
+          <div class="bold font12 l sign_nav_2">
+              示例指南
+            </div>
+            <!--<div class="font12 l color_s3">
+              通过示例的方式为查找并为您的地图添加更多的功能和控件
+              <a href="http://developer.baidu.com/map/jsdemo.htm"
+              target="_blank">详细</a>
+            </div>
+          </div>
+          <div class="tit2 t10 l10 l" style=
+          "width:330px;height:30px;margin:0 0 0 50px;padding:0px;display:inline-block;float:left;">
+          <div class="bold font12 l sign_nav_2">
+              类参考
+            </div>-->
+            <!--<div class="font12 l color_s3">
+              通过代码的方式查找您需要的功能和地图控件
+              <a href=
+              "http://developer.baidu.com/map/reference/"
+              target="_blank">详细</a>
+            </div>
+          </div>
+        </div>-->
+        <div class="t30"></div>
+      </div>
+      <div style="text-align:center;margin:20px 0;font-size:12px">
+        ©2015 Nakonsc <a href=
+        "http://www.nakonsc.com/">纳金供应链管理有限公司</a> <a target=
+        "_blank" href="http://www.miibeian.gov.cn">粤ICP备16030021号</a>
+      </div><script language="JavaScript" type="text/JavaScript">
+//<![CDATA[
+      /*baidu.G('login').href = "https://passport.baidu.com/?login&tpl=dev&u="+window.location.href;
+	  _bapi.init("copy_sign",104,34);
+	  doLoad();
+	  if (window.isMSIE55) fixalpha();
+	  bapi.checkLogin();
+	  bapi.config.apikey = window.location.href;
+	  function openDiv(id){var obj = document.getElementById(id);obj.style.display = "block";}
+	  function closeDiv(id){var obj = document.getElementById(id);obj.style.display = "none";}*/
+	  function setStates(obj,e)
+	  {
+		  var e = window.event || e;var dom = e.target || e.srcElement;
+		  var navType = dom.getAttribute("navType");
+		  var parentNode = obj.parentNode;
+		  if(!navType){return;}
+	 	  if(obj.className == "map_open"){obj.className = "map_close";return;}
+	  	  for(var cn = 0; cn < parentNode.childNodes.length; cn++){
+			  var o = parentNode.childNodes[cn];
+			  if(o.nodeType != 1){
+				  continue;
+			  }
+			  if(o == obj){
+				  o.className = "map_open";
+			  }
+			  else{
+				  o.className = "map_close";
+			  }
+		  }
+		  if(navType == "sign"){
+			  var type = !!_gl.temp.curSignNav?_gl.temp.curSignNav:"Point";
+			  us_sign["open"+type]();
+		  }else{
+			  us_sign.exituserSign();
+		  }
+	}
+	// 百度地图API功能
+	var map = new BMap.Map("MapContent",{enableMapClick:false,});//关闭底图可点功能
+	map.enableScrollWheelZoom() ;
+	map.centerAndZoom(new BMap.Point(117.318789, 27.02211),7)//point, 40);//中心点设置为广州
+	//点击获得经纬度--start
+    map.disableDoubleClickZoom();
+    var xiangxi=new Array();
+
+
+var styleOptions = {
+  strokeColor:"red",    //边线颜色。
+  fillColor:"red",      //填充颜色。当参数为空时，圆形将没有填充效果。
+  strokeWeight: 3,       //边线的宽度，以像素为单位。
+  strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+  fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+  strokeStyle: 'solid' //边线的样式，solid或dashed。
+}
+var drawingManager = new BMapLib.DrawingManager(map, {
+
+  isOpen: false, //是否开启绘制模式
+  enableDrawingTool: false, //是否显示工具栏
+  drawingToolOptions: {
+    anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+    offset: new BMap.Size(5, 5), //偏离值
+    drawingModes:[ BMAP_DRAWING_MARKER,BMAP_DRAWING_POLYLINE]
+  },
+  circleOptions: styleOptions, //圆的样式
+  //直线
+  polylineOptions: {
+    strokeColor:'red',
+    strokeWeight:"7",
+    strokeStyle:"dashed",
+  }, //线的样式
+  polygonOptions: styleOptions, //多边形的样式
+  rectangleOptions: styleOptions, //矩形的样式
+});
+
+
+
+
+
+      //]]>
+//划线函数
+function getValue_huaxian()
+{
+  map.removeEventListener("dblclick",go2);
+  drawingManager.open();
+  //打开计算距离
+  drawingManager.enableCalculate();
+  map.removeEventListener("dblclick",go1);
+  map.removeEventListener("click",go2);
+  document.getElementById("huax").classList.add("nav18");
+  document.getElementById("huax").classList.remove("nav2");
+  //document.getElementById("didian").classList.add("nav17");
+  document.getElementById("didian").classList.remove("nav1");
+  document.getElementById("biaoq").classList.remove("nav17");
+  //
+  document.getElementById("mapCenter").classList.remove('map_open');
+  document.getElementById("mapCenter").classList.add('map_close');
+  document.getElementById("mapCenter2").classList.remove('map_open');
+  document.getElementById("mapCenter2").classList.add('map_close');
+  document.getElementById("mapCenter3").classList.remove('map_close');
+  document.getElementById("mapCenter3").classList.add('map_open');
+  //清除input内容--start
+  var div_huax=document.getElementById("mapCenter3");
+  for(var i=0 ; i<div_huax.getElementsByTagName("input").length;i++){
+    if(div_huax.getElementsByTagName("input")[i].type=="text"){
+      div_huax.getElementsByTagName("input")[i].value="";
+    }
+  }
+  document.getElementById("lxbeizhu").value="";
+  //清除input内容--end
+//温馨提示
+  document.getElementById('signiwNoListTip').innerHTML="<font color='red'>操作：</br>\"左键单击\":地图开始划线</br>\"左键双击\":地图划线结束</br>\"右键单击\":选择已画好的路线可删除</font>";
+
+
+    drawingManager.setDrawingMode(BMAP_DRAWING_POLYLINE);
+  //记录距离
+  //var myDis = new BMapLib.DistanceTool(map);
+  //myDis.open();
+  //线画好后触发事件
+  drawingManager.addEventListener("overlaycomplete", function(e) {
+    document.getElementById("huax").classList.remove("nav18");
+
+    var polyline = e.overlay;
+    //划线坐标数组huaxian_shuzu
+    var huaxian_shuzu=polyline.getPath();
+    var huaxian_shuzu_lenght=huaxian_shuzu.length;
+    console.log(huaxian_shuzu[0]);
+   // alert(huaxian_shuzu[0]);
+    document.getElementById("kaiszb").value="x:"+huaxian_shuzu[0].lng+" " + "y:"+huaxian_shuzu[0].lat;
+    document.getElementById("jieszb").value="x:"+huaxian_shuzu[huaxian_shuzu_lenght-1].lng+" " + "y:"+huaxian_shuzu[huaxian_shuzu_lenght-1].lat;
+    //折线右键删除
+    var polylineMenu = new BMap.ContextMenu();
+    polylineMenu.addItem(new BMap.MenuItem('删除折线', function () {
+      map.removeOverlay(polyline);
+      map.removeOverlay(e.label);
+      //console.log(e.l);
+    }));
+    polyline.addContextMenu(polylineMenu);
+
+
+ /*   var juli=parseInt(e.calculate);
+    if(juli>1000){
+      juli=(juli/1000).toFixed(2);
+      alert(juli+"公里");
+    }else {
+      alert(juli+"米");
+    }*/
+   /* drawingManager.addEventListener("click", function(){
+      //map.removeOverlay(marker01);
+
+  alert('zwds');
+    })*/
+  });
+}
+//地标函数
+      function getValue_didian(){
+        drawingManager.close();
+        map.removeEventListener("click",go2);
+        map.removeEventListener("dblclick",go1);
+        //map.disableDoubleClickZoom();
+        document.getElementById("didian").classList.add("nav1");
+        document.getElementById("huax").classList.remove("nav18");
+        document.getElementById("huax").classList.remove("nav2");
+        document.getElementById("biaoq").classList.remove("nav17");
+        document.getElementById("mapCenter").classList.remove('map_close');
+        document.getElementById("mapCenter").classList.add('map_open');
+        document.getElementById("mapCenter2").classList.remove('map_open');
+        document.getElementById("mapCenter2").classList.add('map_close');
+        document.getElementById("mapCenter3").classList.remove('map_open');
+        document.getElementById("mapCenter3").classList.add('map_close');
+        //清空input内的text内容
+        var div_didian=document.getElementById("mapCenter");
+      console.log(div_didian.getElementsByTagName("input").length);
+        for(var i=0;i<div_didian.getElementsByTagName("input").length;i++){
+          if (div_didian.getElementsByTagName("input")[i].type=='text'){
+            div_didian.getElementsByTagName("input")[i].value="";
+          }
+        }
+        document.getElementById("beizhu").value="";
+          //点击获得经纬度--end
+        document.getElementById('signiwNoListTip').innerHTML="<font color='red'>操作：</br>\"左键双击\":地图插入坐标</br>\"右键单击\":选择已插入的坐标可删除</font>";
+
+
+        map.addEventListener("dblclick",go1);
+        map.removeEventListener("dblclick",go2);
+
+
+
+      }
+      function getValue_didian1(){
+alert('zwz');
+        document.getElementById("didian").classList.add("nav1");
+        document.getElementById("huax").classList.remove("nav18");
+        document.getElementById("huax").classList.remove("nav2");
+        document.getElementById("biaoq").classList.remove("nav17");
+        drawingManager.open();
+        drawingManager.setDrawingMode(BMAP_DRAWING_MARKER);
+
+       drawingManager.addEventListener("markercomplete", function(e) {
+         var x =e.point.lng;
+         var y =e.point.lat;
+         document.getElementById('mapCenterPointX').value=x;
+         document.getElementById('mapCenterPointY').value=y;
+        });
+
+      }
+
+//var overlays = [];
+/*var overlaycomplete = function(e){
+ overlays.push(e.overlay);
+ };*/
+
+
+
+//备注文字函数
+      function getValue_wenzi(){
+        drawingManager.close();
+        map.removeEventListener("dblclick",go1);
+        document.getElementById("huax").classList.remove("nav18");
+        document.getElementById("huax").classList.remove("nav2");
+        document.getElementById("didian").classList.remove("nav1");
+        document.getElementById("biaoq").classList.remove("nav3");
+        document.getElementById("biaoq").classList.add("nav17");
+        document.getElementById("mapCenter").classList.remove('map_open');
+        document.getElementById("mapCenter").classList.add('map_close');
+        document.getElementById("mapCenter2").classList.remove('map_close');
+        document.getElementById("mapCenter2").classList.add('map_open');
+        document.getElementById("mapCenter3").classList.remove('map_open');
+        document.getElementById("mapCenter3").classList.add('map_close');
+
+        document.getElementById('signiwNoListTip').innerHTML="<font color='red'>操作：</br>\"左键双击\":地图可插入文字备注</br>\"右键单击\":选择已插入的文字可删除</font>";
+        //清除文字
+        document.getElementById("mapCenterPointX1").value='';
+        document.getElementById("mapCenterPointY1").value='';
+        document.getElementById("xxbeizhu").value='';
+        map.addEventListener("dblclick",go2);
+
+      }
+
+//删除地标函数--start
+var removeMarker = function(e,ee,marker){
+  map.removeOverlay(marker);
+}
+//删除地标函数--end
+
+//监听事件001
+function go1(e){
+
+  drawingManager.close();
+  var x =e.point.lng;
+  var y =e.point.lat;
+  document.getElementById('mapCenterPointX').value=x;
+  document.getElementById('mapCenterPointY').value=y;
+  var point = new BMap.Point(x,y);
+  var marker = new BMap.Marker(point); // 创建点
+  //绑定删除--start
+  var markerMenu=new BMap.ContextMenu();
+  markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker)));
+  //创建右键菜单
+  marker.addContextMenu(markerMenu);
+//绑定删除--end
+
+  //判断是否是
+  map.addOverlay(marker);    //增加点
+  var opts = {
+    width : 200,     // 信息窗口宽度
+    height: 110,     // 信息窗口高度
+    title : "纳金供应链仓库信息" , // 信息窗口标题
+    enableMessage:true,//设置允许信息窗发送短息
+    message:"oooo",
+    enableCloseOnClick:false
+  }
+  var infoWindow = new BMap.InfoWindow("仓库名称：</br>联系方式：</br>占地面积：</br>仓库备注：</br>仓库产权：", opts);  // 创建信息窗口对象
+  map.openInfoWindow(infoWindow,point); //开启信息窗口
+
+  marker.addEventListener("click", function(){
+    //map.removeOverlay(marker01);
+
+    //默认打开情况
+
+    if(xiangxi.length>0){
+      var infoWindow = new BMap.InfoWindow("仓库名称："+xiangxi[0]+"</br>联系方式："+xiangxi[1]+"</br>占地面积："+xiangxi[2]+"</br>仓库备注："+xiangxi[3]+"</br>仓库产权："+xiangxi[4]+"", opts);  // 创建信息窗口对象
+
+    }
+    else {
+      var infoWindow = new BMap.InfoWindow("仓库名称：</br>联系方式：</br>占地面积：</br>仓库备注：</br>仓库产权：", opts);  // 创建信息窗口对象
+    }
+    map.openInfoWindow(infoWindow,point); //开启信息窗口
+  });
+
+
+
+
+}
+
+//监听事件002
+      function go2(e) {
+        var x = e.point.lng;
+        var y = e.point.lat;
+        document.getElementById('mapCenterPointX1').value = x;
+        document.getElementById('mapCenterPointY1').value = y;
+        //document.getElementById('beizhu1').value="欢迎使用百度地图";
+        var point = new BMap.Point(x, y);
+        //map.centerAndZoom(point, 15);
+        var opts = {
+          position: point,    // 指定文本标注所在的地理位置
+          offset: new BMap.Size(0, -30)    //设置文本偏移量
+        }
+        var label = new BMap.Label("请在右边菜单栏输入文字", opts);  // 创建文本标注对象
+        label.setStyle({
+          color: "red",
+          fontSize: "12px",
+          height: "20px",
+          lineHeight: "20px",
+          fontFamily: "微软雅黑"
+        });
+        //绑定删除--start
+        var markerMenu=new BMap.ContextMenu();
+        markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(label)));
+        //创建右键菜单
+        label.addContextMenu(markerMenu);
+//绑定删除--end*/
+
+
+        map.addOverlay(label);
+}
+function sumbitTest(){
+        //填写坐标点信息保存点
+
+//
+     /*    var ck_name=document.getElementById('ckname').value;
+         var lxfs=document.getElementById('phone').value;
+         var zdmj=document.getElementById('mianji').value;
+         var ckbz=document.getElementById('beizhu').value;*/
+      xiangxi[0]=document.getElementById('ckname').value;
+      xiangxi[1]=document.getElementById('phone').value;
+      xiangxi[2]=document.getElementById('mianji').value;
+      xiangxi[3]=document.getElementById('beizhu').value;
+      var xingzhi01=document.getElementsByName('xingzhi');
+        if(xingzhi01){
+        for(var i=0;i < xingzhi01.length;i++)
+        {
+          if(xingzhi01[i].checked)
+          {
+            xiangxi[4]=xingzhi01[i].value;
+          }
+        }
+      }
+        //infoWindow = new BMap.InfoWindow("仓库性质：我司", opts);  // 创建信息窗口对象
+
+        map.removeEventListener("dblclick",go1);
+        map.addEventListener("dblclick",go1);
+        alert("仓库信息填写成功");
+
+        //
+        return false;
+      }
+
+
+      //填写划线信息保存点
+      function sumbitTest2(){
+        //hasClass(document.querySelectorAll("label"),'002')
+        console.log(document.querySelectorAll('label').length);
+          var lucd =document.getElementById('lucd').value;
+          var kais =document.getElementById('kais').value;
+          var jies=document.getElementById('jies').value;
+          var lxmc=document.getElementById('lxmc').value;
+          var lxbeizhu=document.getElementById('lxbeizhu').value;
+          var huaxxx="开始地点："+kais+"</br>结束地点："+jies+"</br>" +
+                  "路线名称："+lxmc+"</br>路线长度："+lucd+"</br>路线备注："+lxbeizhu+""
+        for(var i=0;i<document.querySelectorAll('label').length;i++){
+          if (document.querySelectorAll('label')[i].className=='BMapLabel'){
+            //改最后一个信息
+            if(i==document.querySelectorAll('label').length-1){
+            document.getElementsByClassName('BMapLabel')[i].innerHTML=huaxxx;}
+
+          }
+        }alert('路线信息修正');
+     /*   if(document.querySelector("label").className.indexOf('002')>-1){
+          alert('meiy')
+          return false;
+
+        }*/
+        return false;
+
+
+
+      }
+//文字备注提交
+function sumbitTest3(){
+  var beizhuxx=document.getElementById('xxbeizhu').value;
+  for(var i=0;i<document.querySelectorAll('label').length;i++){
+    if (document.querySelectorAll('label')[i].className=='BMapLabel'){
+      //改最后一个信息
+      if(i==document.querySelectorAll('label').length-1){
+        document.getElementsByClassName('BMapLabel')[i].innerHTML=beizhuxx;}
+    }
+  }alert('文字备注填写完成');
+  return false;
+}
+
+      window.onload=function(){
+        //插入第一个坐标-广州仓库
+       var x =113.413963;
+        var y =23.142172;
+        var point1 = new BMap.Point(x,y);
+        var marker1 = new BMap.Marker(point1); // 创建点
+        //绑定删除--start
+        var markerMenu=new BMap.ContextMenu();
+        markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker1)));
+        //创建右键菜单
+        marker1.addContextMenu(markerMenu);
+//绑定删除--end
+
+        //判断是否是
+        map.addOverlay(marker1);    //增加点
+        var opts = {
+          width : 200,     // 信息窗口宽度
+          height: 110,     // 信息窗口高度
+          title : "纳金供应链仓库信息" , // 信息窗口标题
+          enableMessage:true,//设置允许信息窗发送短息
+          message:"oooo",
+          enableCloseOnClick:false
+        }
+        var infoWindow = new BMap.InfoWindow("仓库名称：纳金广州仓</br>联系方式：:010-86551122 </br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+        map.openInfoWindow(infoWindow,point1); //开启信息窗口
+
+        marker1.addEventListener("click", function(){
+          //map.removeOverlay(marker01);
+          //默认打开情况
+            var infoWindow = new BMap.InfoWindow("仓库名称：纳金广州仓</br>联系方式：:020-86551122 </br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+          map.openInfoWindow(infoWindow,point1); //开启信息窗口
+        });
+
+
+//插入第二个坐标上海仓库
+        var x1 =121.513373;
+        var y1 =31.284167;
+        var point2 = new BMap.Point(x1,y1);
+        var marker2 = new BMap.Marker(point2); // 创建点
+        //绑定删除--start
+        var markerMenu=new BMap.ContextMenu();
+        markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker2)));
+        //创建右键菜单
+        marker2.addContextMenu(markerMenu);
+//绑定删除--end
+
+        //判断是否是
+        map.addOverlay(marker2);    //增加点
+        var opts = {
+          width : 200,     // 信息窗口宽度
+          height: 110,     // 信息窗口高度
+          title : "纳金供应链仓库信息" , // 信息窗口标题
+          enableMessage:true,//设置允许信息窗发送短息
+          message:"oooo",
+          enableCloseOnClick:false
+        }
+        var infoWindow = new BMap.InfoWindow("仓库名称：纳金广州仓</br>联系方式：:010-86551144 </br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+        marker2.addEventListener("click", function(){
+          //map.removeOverlay(marker01);
+          //默认打开情况
+          var infoWindow = new BMap.InfoWindow("仓库名称：纳金上海仓</br>联系方式：:020-86553322</br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+          map.openInfoWindow(infoWindow,point2); //开启信息窗口
+        })
+
+
+
+//插入第三个坐标武汉仓库
+var x1 =114.301632;
+var y1 =30.602278;
+var point3 = new BMap.Point(x1,y1);
+var marker3 = new BMap.Marker(point3); // 创建点
+//绑定删除--start
+var markerMenu=new BMap.ContextMenu();
+markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker3)));
+//创建右键菜单
+marker3.addContextMenu(markerMenu);
+//绑定删除--end
+
+//判断是否是
+map.addOverlay(marker3);    //增加点
+var opts = {
+  width : 200,     // 信息窗口宽度
+  height: 110,     // 信息窗口高度
+  title : "纳金供应链仓库信息" , // 信息窗口标题
+  enableMessage:true,//设置允许信息窗发送短息
+  message:"oooo",
+  enableCloseOnClick:false
+}
+
+marker3.addEventListener("click", function(){
+  //map.removeOverlay(marker01);
+  //默认打开情况
+  var infoWindow = new BMap.InfoWindow("仓库名称：纳金武汉仓</br>联系方式：020-86553322</br>占地面积：15亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+  map.openInfoWindow(infoWindow,point3); //开启信息窗口
+})
+
+
+
+
+//插入第四个坐标南昌仓库
+var x1 =115.865403;
+var y1 =28.722378;
+var point4 = new BMap.Point(x1,y1);
+var marker4 = new BMap.Marker(point4); // 创建点
+//绑定删除--start
+var markerMenu=new BMap.ContextMenu();
+markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker4)));
+//创建右键菜单
+marker4.addContextMenu(markerMenu);
+//绑定删除--end
+
+//判断是否是
+map.addOverlay(marker4);    //增加点
+var opts = {
+  width : 200,     // 信息窗口宽度
+  height: 110,     // 信息窗口高度
+  title : "纳金供应链仓库信息" , // 信息窗口标题
+  enableMessage:true,//设置允许信息窗发送短息
+  message:"oooo",
+  enableCloseOnClick:false
+}
+
+marker4.addEventListener("click", function(){
+  //map.removeOverlay(marker01);
+  //默认打开情况
+  var infoWindow = new BMap.InfoWindow("仓库名称：纳金南昌仓</br>联系方式：020-86553322</br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+  map.openInfoWindow(infoWindow,point4); //开启信息窗口
+})
+
+
+        //插入第五个坐标南昌仓库
+        var x1 =109.996665;
+        var y1 =27.61371;
+        var point5 = new BMap.Point(x1,y1);
+        var marker5 = new BMap.Marker(point5); // 创建点
+//绑定删除--start
+        var markerMenu=new BMap.ContextMenu();
+        markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker5)));
+//创建右键菜单
+        marker5.addContextMenu(markerMenu);
+//绑定删除--end
+
+//判断是否是
+        map.addOverlay(marker5);    //增加点
+        var opts = {
+          width : 200,     // 信息窗口宽度
+          height: 110,     // 信息窗口高度
+          title : "纳金供应链仓库信息" , // 信息窗口标题
+          enableMessage:true,//设置允许信息窗发送短息
+          message:"oooo",
+          enableCloseOnClick:false
+        }
+
+        marker5.addEventListener("click", function(){
+          //map.removeOverlay(marker01);
+          //默认打开情况
+          var infoWindow = new BMap.InfoWindow("仓库名称：纳金怀化仓</br>联系方式：020-86553322</br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+          map.openInfoWindow(infoWindow,point5); //开启信息窗口
+        })
+
+
+
+//插入第四个坐标南昌仓库
+var x1 =115.865403;
+var y1 =28.722378;
+var point4 = new BMap.Point(x1,y1);
+var marker4 = new BMap.Marker(point4); // 创建点
+//绑定删除--start
+var markerMenu=new BMap.ContextMenu();
+markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker4)));
+//创建右键菜单
+marker4.addContextMenu(markerMenu);
+//绑定删除--end
+
+//判断是否是
+map.addOverlay(marker4);    //增加点
+var opts = {
+  width : 200,     // 信息窗口宽度
+  height: 110,     // 信息窗口高度
+  title : "纳金供应链仓库信息" , // 信息窗口标题
+  enableMessage:true,//设置允许信息窗发送短息
+  message:"oooo",
+  enableCloseOnClick:false
+}
+
+marker4.addEventListener("click", function(){
+  //map.removeOverlay(marker01);
+  //默认打开情况
+  var infoWindow = new BMap.InfoWindow("仓库名称：纳金南昌仓</br>联系方式：020-86553322</br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+  map.openInfoWindow(infoWindow,point4); //开启信息窗口
+})
+
+
+//插入第六个坐标福建仓库
+var x1 =119.321795;
+var y1 =26.120485;
+var point6 = new BMap.Point(x1,y1);
+var marker6 = new BMap.Marker(point6); // 创建点
+//绑定删除--start
+var markerMenu=new BMap.ContextMenu();
+markerMenu.addItem(new BMap.MenuItem('删除',removeMarker.bind(marker6)));
+//创建右键菜单
+marker6.addContextMenu(markerMenu);
+//绑定删除--end
+
+//判断是否是
+map.addOverlay(marker6);    //增加点
+var opts = {
+  width : 200,     // 信息窗口宽度
+  height: 110,     // 信息窗口高度
+  title : "纳金供应链仓库信息" , // 信息窗口标题
+  enableMessage:true,//设置允许信息窗发送短息
+  message:"oooo",
+  enableCloseOnClick:false
+}
+
+marker6.addEventListener("click", function(){
+  //map.removeOverlay(marker01);
+  //默认打开情况
+  var infoWindow = new BMap.InfoWindow("仓库名称：福建怀化仓</br>联系方式：020-86553322</br>占地面积：10亩</br>仓库备注：2007年建成</br>仓库产权：自有", opts);  // 创建信息窗口对象
+
+  map.openInfoWindow(infoWindow,point6); //开启信息窗口
+})}
+
+
+
+
+
+//增加折线001  广州到佛山
+var polyline01 = new BMap.Polyline([
+  new BMap.Point(113.265635, 23.114521),
+  new BMap.Point(113.106527, 22.964599)
+], {strokeColor:"red", strokeWeight:6, strokeOpacity:1,strokeStyle:"dashed"});   //创建折线
+map.addOverlay(polyline01);
+//折线右键删除
+var polylineMenu = new BMap.ContextMenu();
+polylineMenu.addItem(new BMap.MenuItem('删除折线', function () {
+  map.removeOverlay(polyline01);
+ map.removeOverlay(label01);
+  //console.log(e.l);
+}));
+polyline01.addContextMenu(polylineMenu);
+//划线的文字备注
+var point = new BMap.Point(113.106527, 22.964599);
+//map.centerAndZoom(point, 15);
+var opts = {
+  position: point,    // 指定文本标注所在的地理位置
+  offset: new BMap.Size(0, 5)    //设置文本偏移量
+};
+var label01 = new BMap.Label("路线名称：广佛路线</br>开始地点：广州</br>结束地点：乐从</br>路线长度：26.15公里</br>运输费用：16元/吨", opts);  // 创建文本标注对象
+label01.setStyle({
+  color: "red",
+  fontSize: "12px",
+  height: "100px",
+  lineHeight: "20px",
+  fontFamily: "微软雅黑"
+});
+map.addOverlay(label01);
+
+
+//增加折线002  长沙到南昌
+var polyline01 = new BMap.Polyline([
+  new BMap.Point(112.82065, 28.242838),
+  new BMap.Point(115.837807, 28.714268)
+], {strokeColor:"red", strokeWeight:6, strokeOpacity:1,strokeStyle:"dashed"});   //创建折线
+map.addOverlay(polyline01);
+//折线右键删除
+var polylineMenu = new BMap.ContextMenu();
+polylineMenu.addItem(new BMap.MenuItem('删除折线', function () {
+  map.removeOverlay(polyline01);
+  map.removeOverlay(label02);
+  //console.log(e.l);
+}));
+polyline01.addContextMenu(polylineMenu);
+//划线的文字备注
+var point11 = new BMap.Point(114.58679, 28.486947);
+//map.centerAndZoom(point, 15);
+var opts = {
+  position: point11,    // 指定文本标注所在的地理位置
+  offset: new BMap.Size(0, 5)    //设置文本偏移量
+};
+var label02 = new BMap.Label("路线名称：长沙南昌路线</br>开始地点：长沙</br>结束地点：南昌</br>路线长度：287.42公里</br>运输费用：18元/吨", opts);  // 创建文本标注对象
+label02.setStyle({
+  color: "red",
+  fontSize: "12px",
+  height: "100px",
+  lineHeight: "20px",
+  fontFamily: "微软雅黑"
+});
+map.addOverlay(label02);
+
+
+      </script>
+
+
+    </div>
+  </body>
+</html>
+
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hello, World</title>
+    <style type="text/css">
+        html{height:100%}
+        body{height:100%;margin:0px;padding:0px}
+        #container{height:100%}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=XAtaCdh72dnhO5v2UEKLFptGSsFjf0UG">
+        //v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+        //v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
+    </script>
+
+</head>
+
+<body>
+<form action="demo_form.asp">
+   <button type="button" onclick="closeDiv()">xx</button>
+</form>
+
+<span style="font-size:18px;"><div id="div">
+    <div id="addDiv">
+        <button id="add">添加</button>
+    </div>
+</div></span>
+
+
+</body>
+</html>
+<script type="text/javascript">
+    function closeDiv(){
+        alert('zcxzc');
+    }
+</script>
+
+<script type="text/javascript">
+    /*
+     当点击添加的时候，创建div
+
+     */
+    window.onload = function(){
+        var strAdd = document.getElementById("add");
+        var box = document.getElementById("div");
+        strAdd.onclick =addDiv;
+        //1：创建盒子节点
+        function addDiv(){
+            var newDiv = document.createElement("div");
+            newDiv.style.height = "50px";
+            newDiv.style.backgroundColor = rondomColor();
+            box.appendChild(newDiv);
+
+            //2：创建删除按钮
+            var delBtn = document.createElement("button");
+            delBtn.innerHTML = "删除";
+            delBtn.style.width = "50px";
+            delBtn.style.height = "50px";
+            delBtn.style.background = "pink";
+            delBtn.style.float = "right";
+            newDiv.appendChild(delBtn);
+            //3：希望点击删除的时候把当前的盒子节点删除掉
+            delBtn.onclick = removeDiv;
+        }
+        function removeDiv(){
+            box.removeChild(this.parentNode);
+        }
+
+        //点击添加的时候产生随机色
+        function rondomColor(){
+            return "#"+ Math.floor(Math.random()*16*16*16*16*16*16).toString(16);
+        }
+
+    }
+</script>
+
+
